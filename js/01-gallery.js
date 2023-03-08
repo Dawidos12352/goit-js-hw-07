@@ -17,7 +17,7 @@ const galleryImage = document.createElement("img");
 galleryImage.classList = "gallery__image"
 galleryImage.src = event.preview;
 galleryImage.alt = event.description;
-galleryImage.setAttribute("data-source", event.orginal);
+galleryImage.setAttribute("data-source", event.original);
 
 galleryItem.append(galleryLink);
 galleryLink.append(galleryImage);
@@ -27,4 +27,22 @@ galleryArray.push(galleryItem);
 
 gallery.append(...galleryArray);
 
-console.log(galleryItems);
+gallery.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.nodeName !== "IMG") return;
+    const imageDataSource = e.target.getAttribute("data-source");
+
+    const instance = basicLightbox.create(
+        `<img src="${imageDataSource}" width="800" height="600">`,
+        {
+            onShow: (instance) => {
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape") instance.close();
+                });
+            }
+        });
+    
+    instance.show();
+
+});
+
